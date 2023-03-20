@@ -9,6 +9,24 @@ I also like to use [pyenv](https://github.com/pyenv/pyenv) and `virtualenv`. The
 
 git clone https://github.com/SolidRusT/srt-nolag-platform-client.git
 
+example SQL. Configure this before adding to your DB.
+
+```sql
+CREATE DATABASE IF NOT EXISTS oxide;
+USE oxide;
+CREATE TABLE config_values (
+  id INT NOT NULL AUTO_INCREMENT,
+  server_name VARCHAR(50) NOT NULL,
+  key_name VARCHAR(50) NOT NULL,
+  value VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE USER 'oxide_client'@'%' IDENTIFIED BY 'SomePassword123';
+GRANT ALL PRIVILEGES ON *.* TO 'oxide_client'@'%';
+FLUSH PRIVILEGES;
+```
+
 cd srt-nolag-platform-client
 
 Copy the `config.ini.example` to `config.ini`.
