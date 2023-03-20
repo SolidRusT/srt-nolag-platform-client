@@ -1,3 +1,3 @@
 #!/bin/bash
-source venv/bin/activate && python package_watcher.py ../packages &
+source venv/bin/activate && python oxide_update.py &
 deactivate

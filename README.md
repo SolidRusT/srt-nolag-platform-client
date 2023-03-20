@@ -5,7 +5,11 @@ Requires `python3` and `virtualenv`. Some distributions you can install `python-
 
 I also like to use [pyenv](https://github.com/pyenv/pyenv) and `virtualenv`. These are not required, but are just better to use, so that we have more control over the python environment here.
 
-## Configure, Install and Run.
+## Download, Configure, Install and Run.
+
+git clone https://github.com/SolidRusT/srt-nolag-platform-client.git
+
+cd srt-nolag-platform-client
 
 Copy the `config.ini.example` to `config.ini`.
 
