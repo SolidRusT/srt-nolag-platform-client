@@ -4,6 +4,7 @@ import zipfile
 from configparser import ConfigParser
 import boto3
 import requests
+import shutil
 
 # Read config.ini
 config = ConfigParser()
@@ -23,10 +24,14 @@ def download_and_extract_zip(s3_object_key, local_path):
 
     os.remove(local_zip_path)
 
-def download_and_move_dll(url, local_path):
+def download_and_move_dll_from_s3(s3_object_key, local_path):
+    s3.download_file(S3_REPO, s3_object_key, local_path)
+
+def download_and_move_dll_from_url(url, local_path):
     response = requests.get(url)
     with open(local_path, "wb") as f:
         f.write(response.content)
+
 
 def get_latest_rcon_version():
     response = requests.get("https://github.com/gorcon/rcon-cli/releases")
@@ -45,14 +50,15 @@ def download_and_extract_rcon(latest_rcon):
 
     os.rename(f"rcon-{latest_rcon}-amd64_linux/rcon", os.path.join(GAME_ROOT, "rcon"))
     os.remove(rcon_file)
-    os.rmdir(f"rcon-{latest_rcon}-amd64_linux")
+    shutil.rmtree(f"rcon-{latest_rcon}-amd64_linux")
 
 # Main script execution
 download_and_extract_zip("Oxide.Rust-linux.zip", GAME_ROOT)
 
 managed_dir = os.path.join(GAME_ROOT, "RustDedicated_Data/Managed")
-download_and_move_dll(f"{S3_REPO}/Oxide.Ext.Discord.dll", os.path.join(managed_dir, "Oxide.Ext.Discord.dll"))
-download_and_move_dll("https://github.com/k1lly0u/Oxide.Ext.RustEdit/raw/master/Oxide.Ext.RustEdit.dll", os.path.join(managed_dir, "Oxide.Ext.RustEdit.dll"))
+download_and_move_dll_from_s3("Oxide.Ext.Discord.dll", os.path.join(managed_dir, "Oxide.Ext.Discord.dll"))
+download_and_move_dll_from_url("https://github.com/k1lly0u/Oxide.Ext.RustEdit/raw/master/Oxide.Ext.RustEdit.dll", os.path.join(managed_dir, "Oxide.Ext.RustEdit.dll"))
+
 
 latest_rcon = get_latest_rcon_version()
 download_and_extract_rcon(latest_rcon)
